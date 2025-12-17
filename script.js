@@ -1,5 +1,9 @@
 function sideChosen(holiday) {
-  //alert("You have chosen " + holiday + "!");
+  if (holiday === "hanukkah") {
+    $("Hanukkah").classList.add("extendHanukkah");
+  } else if (holiday === "christmas") {
+    $("Christmas").classList.add("extendChristmas");
+  }
 }
 
 // Snowfall: create floating snowflake elements

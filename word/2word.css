@@ -1,6 +1,10 @@
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(#0033a0, #ffffff);
+  background-image: url('imgs/backdrop.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
   text-align: center;
   color: #0033a0;
 }

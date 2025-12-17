@@ -4,7 +4,7 @@ html {
 }
 
 body {
-  background-image: url("imgs/candycane.gif");
+  background-image: url("imgs/backdrop.gif");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
