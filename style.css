@@ -11,39 +11,42 @@ body {
 #Christmas,
 #Hanukkah {
   height: 100%;
-  display: flex;
+
   align-items: center;
   justify-content: center;
-  font-size: 80px;
+  Color:white;
 }
 #Christmas {
   background: #e63946;
+  width:52%;
   clip-path: polygon(
     8% 0,
     100% 0,
     100% 100%,
-    8% 100%,
-    0 96%,
-    8% 90%,
-    0 84%,
-    8% 78%,
-    0 72%,
-    8% 66%,
-    0 60%,
-    8% 54%,
-    0 48%,
-    8% 42%,
-    0 36%,
-    8% 30%,
-    0 24%,
-    8% 18%,
-    0 12%,
-    8% 6%
+    0 100%,
+    8% 96%,
+    0 90%,
+    8% 84%,
+    0 78%,
+    8% 72%,
+    0 66%,
+    8% 60%,
+    0 54%,
+    8% 48%,
+    0 42%,
+    8% 36%,
+    0 30%,
+    8% 24%,
+    0 18%,
+    8% 12%,
+    0 6%
   );
+  margin-left:-2%;
 }
 
 #Hanukkah {
   background: #1e90ff;
+  width:52%;
   clip-path: polygon(
     0 0,
     100% 0,
@@ -66,4 +69,32 @@ body {
     92% 100%,
     0 100%
   );
+  margin-right:-2%;
 }
+#Christmas p,
+#Hanukkah p {
+  font-size: 80px;
+}
+
+/* Snowfall animation styles */
+.snowflake {
+  position: fixed;
+  top: -10px;
+  z-index: 9999;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, opacity;
+  display: block;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+
+@keyframes fall {
+  to { top: 110vh; }
+}
+
+@keyframes sway {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(20px); }
+  100% { transform: translateX(0); }
+}
+

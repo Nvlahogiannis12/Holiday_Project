@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hanukkah Word Search</title>
+    <link rel="stylesheet" href="2word.css">
+</head>
+
+<body>
+
+    <h1>🕎 Hanukkah Word Search 🕎</h1>
+
+    <!-- PLAY BUTTON -->
+    <button id="playBtn" onclick="playGame()">Play Game</button>
+
+    <!-- GAME AREA (HIDDEN INITIALLY) -->
+    <div id="gameContainer" class="game-container hidden">
+        <div id="grid" class="grid"></div>
+
+        <div class="word-list">
+            <h3>Find These Words:</h3>
+            <ul id="words"></ul>
+            <button onclick="restartGame()">Restart</button>
+        </div>
+    </div>
+
+    <script src=2word.js"></script>
+</body>
+
+</html>

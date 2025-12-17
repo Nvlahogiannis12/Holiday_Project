@@ -1,4 +1,8 @@
 "use strict";
+
+/* =======================
+   WORD LIST
+======================= */
 const wordlist = [
   "celebration",
   "reindeer",
@@ -17,42 +21,46 @@ const wordlist = [
   "elf",
 ];
 
-//WEBSITE NEEDST O BE FIXED< YOU CAANT REPLAY WHEN YOU BEAT A LV
-
-//setting ame Variables
+/* =======================
+   GAME VARIABLES
+======================= */
 let selectedWord = "";
 let displayedWord = "";
 let wrongGuesses = 0;
 let guessedLetters = [];
+
 const maxMistakes = 6;
 
-let lives = maxMistakes;
-
+/* =======================
+   START GAME
+======================= */
 function startGame(level) {
+  resetGameState();
+
   selectedWord = getRandomWord(level);
 
-  // Update Difficulty selection bax
   updateDifficultyDisplay(level);
 
-  //create placeholder for the selected word
   displayedWord = "_".repeat(selectedWord.length);
   document.getElementById("wordDisplay").textContent = displayedWord
     .split("")
     .join(" ");
 
-  // hide difficulty selection and show game area
   document.getElementById("dificultySelection").classList.add("d-none");
-
   document.getElementById("gameArea").classList.remove("d-none");
   document.getElementById("difficultyBox").classList.remove("d-none");
 
-  document.getElementById("gameArea").classList.add("d-block");
-  document.getElementById("difficultyBox").classList.add("d-block");
+  document.getElementById("letterInput").disabled = false;
+  document.getElementById("guessBtn").disabled = false;
+  document.getElementById("letterInput").focus();
 }
 
+/* =======================
+   WORD PICKER
+======================= */
 function getRandomWord(level) {
   let filteredWords = wordlist.filter((word) => {
-    if (level === "Easy") return word.length <= 4; //change the 4 so its longer and change the words shorter than 4
+    if (level === "Easy") return word.length <= 4;
     if (level === "Medium") return word.length >= 5 && word.length <= 7;
     if (level === "Hard") return word.length >= 8;
   });
@@ -60,42 +68,37 @@ function getRandomWord(level) {
   return filteredWords[Math.floor(Math.random() * filteredWords.length)];
 }
 
+/* =======================
+   DIFFICULTY DISPLAY
+======================= */
 function updateDifficultyDisplay(level) {
-  let difficultyBox = document.getElementById("difficultyBox");
+  const difficultyBox = document.getElementById("difficultyBox");
 
-  //remove previously difficulty bux
-  difficultyBox.classList.remove("Hard", "Insane", "Imposable");
-
-  difficultyBox.textContent = `${
-    level.charAt(0).toUpperCase() + level.slice(1)
-  }`;
-
-  //Apply CSS style
+  difficultyBox.textContent = level;
+  difficultyBox.className = "mt-3 p-3 fw-bold board2";
   difficultyBox.classList.add(level);
 }
 
+/* =======================
+   GUESS LETTER
+======================= */
 function guessLetter() {
-  let inputField = document.getElementById("letterInput"); //get input field
-  let guessedLetter = inputField.value.toLowerCase(); //convert to lower case
+  const input = document.getElementById("letterInput");
+  const guessedLetter = input.value.toLowerCase();
 
-  //check if input is valad between lowercase A-Z
   if (!guessedLetter.match(/^[a-z]$/)) {
-    alert("Please enter a letter between a-z");
-    inputField.value = ""; //clear input field
-    return; //exit function
+    alert("Please enter a valid letter (a-z)");
+    input.value = "";
+    return;
   }
 
-  //check if lettre was already guessed
   if (guessedLetters.includes(guessedLetter)) {
-    alert(
-      "You already tried this letter! Put another letter you have yet to try!"
-    );
-    inputField.value = ""; //clear input field
-    return; //exit function
-  } else {
-    //store guessed letter in guessedLetter]
-    guessedLetters.push(guessedLetter);
+    alert("You already guessed that letter!");
+    input.value = "";
+    return;
   }
+
+  guessedLetters.push(guessedLetter);
 
   if (selectedWord.includes(guessedLetter)) {
     correctGuess(guessedLetter);
@@ -103,140 +106,122 @@ function guessLetter() {
     wrongGuess(guessedLetter);
   }
 
-  inputField.value = ""; //clear input field
-  inputField.focus(); // refocuses input feild for next guess
+  input.value = "";
+  input.focus();
 }
 
-function wrongGuess(guessedLetter) {
-  // Play sound for wrong guess
+/* =======================
+   WRONG GUESS
+======================= */
+function wrongGuess(letter) {
   sound("sound/wrong.wav");
 
-  // Increment the number of wrong guesses
   wrongGuesses++;
 
-  // Add the guessed letter to the wrong letters display
-  document.getElementById("wrongLetters").textContent += ` ${guessedLetter}`;
-
-  // Update the hangman image based on the number of wrong guesses
+  document.getElementById("wrongLetters").textContent += ` ${letter}`;
   document.getElementById("hangmanFigure").src = `imgs/HM${wrongGuesses}.png`;
 
-  // Check if the number of wrong guesses has reached the maximum number of allowed mistakes (game over)
-  if (wrongGuesses === maxMistakes) {
-    endGame(false); // If max mistakes are reached, end the game with a loss
+  if (wrongGuesses >= maxMistakes) {
+    endGame(false);
   }
 }
 
-function correctGuess(guessedLetter) {
-  // Play sound for correct guess
+/* =======================
+   CORRECT GUESS
+======================= */
+function correctGuess(letter) {
   sound("sound/right.wav");
 
-  let newDisplayWord = "";
+  let updatedWord = "";
 
-  // Update displayed word
   for (let i = 0; i < selectedWord.length; i++) {
-    if (selectedWord[i] === guessedLetter) {
-      newDisplayWord += guessedLetter;
-    } else {
-      newDisplayWord += displayedWord[i];
-    }
+    updatedWord += selectedWord[i] === letter ? letter : displayedWord[i];
   }
 
-  displayedWord = newDisplayWord;
+  displayedWord = updatedWord;
   document.getElementById("wordDisplay").textContent = displayedWord
     .split("")
     .join(" ");
 
-  // Check if the word is fully guessed
   if (!displayedWord.includes("_")) {
-    endGame(true); // If the word is completed, end the game with a win
+    endGame(true);
   }
 }
 
+/* =======================
+   END GAME
+======================= */
 function endGame(won) {
-  // After game is over, update the Graveyard
-  if (won === true) {
-    // Update the Graveyard with the correctly guessed word
+  document.getElementById("guessBtn").disabled = true;
+  document.getElementById("letterInput").disabled = true;
+
+  if (won) {
     updateGraveyard(true, selectedWord);
+    sound("sound/complete.wav");
+    alert("🎉 Congrats! You beat Inpossa-man!");
   } else {
-    // Update the Graveyard with the wrong word
     updateGraveyard(false, selectedWord);
-  }
-
-  // Display a win or loss message
-  if (won === true) {
-    setTimeout(() => {
-      sound("sound/complete.wav");
-      document.getElementById("gameArea").innerHTML = `
-                <div style="text-align: center; font-size: 24px; font-weight: bold;">
-                    Congrats! You beat Inpossa-man!<br>
-                    <button onclick="restartGame()" class="btn difficulty-btn Ez">
-                        Play Again
-                    </button>
-                </div>
-            `;
-    }, 100);
-  } else {
-    setTimeout(() => {
-      sound("sound/incomplete.wav");
-      document.getElementById("gameArea").innerHTML = `
-                <div style="text-align: center; font-size: 24px; font-weight: bold;">
-                    You lost to Inpossa-man!<br>
-                    <img src="imgs/HM6.png" class="img"> <br>
-                    <button onclick="restartGame()" class="btn difficulty-btn Ez">
-                        Try Again?
-                    </button>
-                </div>
-            `;
-    }, 100);
+    sound("sound/incomplete.wav");
+    alert(`💀 You lost! The word was: ${selectedWord}`);
   }
 }
 
-// enter btn
-document
-  .getElementById("letterInput")
-  .addEventListener("keydown", function (event) {
-    // If Enter key (key code 13 or 'Enter') is pressed, call guessLetter
-    if (event.key === "Enter") {
-      event.preventDefault(); // Prevent default action (like form submission)
-      guessLetter(); // Trigger guessLetter function
-    }
-  });
-
-function sound(url) {
-  let audio = new Audio(url);
-  audio.play();
-}
-
-function updateGraveyard(isCorrect, word) {
-  let correctWords = document.getElementById("correctWords");
-  let wrongWords = document.getElementById("wrongWords");
-
-  // Update the correct or wrong word list
-  if (isCorrect) {
-    correctWords.textContent += word + ", ";
-  } else {
-    wrongWords.textContent += word + ", ";
-  }
-}
-
-function restartGame() {
-  document.getElementById("dificultySelection").classList.remove("d-none");
-  document.getElementById("difficultyBox").classList.add("d-none");
-  document.getElementById("gameArea").classList.add("d-none");
-
-  lives = 6;
+/* =======================
+   RESET GAME
+======================= */
+function resetGameState() {
   wrongGuesses = 0;
   guessedLetters = [];
   selectedWord = "";
   displayedWord = "";
 
-  // document.getElementById('lives').textContent = `Lives: ${lives}`;
-  // document.getElementById('wrongLetters').textContent = 'Wrong Guesses:';
-  // document.getElementById('victoryText').classList.add('d-none');
-  // document.getElementById('lossText').classList.add('d-none');
-  // document.getElementById('revealedWord').classList.add('d-none');
   document.getElementById("wordDisplay").textContent = "";
+  document.getElementById("wrongLetters").textContent = "Wrong Guesses:";
+  document.getElementById("hangmanFigure").src = "imgs/HM1.png";
   document.getElementById("letterInput").value = "";
-  document.getElementById("guessBtn").disabled = false;
-  // updateHealthDisplay();
+}
+
+/* =======================
+   RESTART BUTTON
+======================= */
+function restartGame() {
+  resetGameState();
+
+  document.getElementById("dificultySelection").classList.remove("d-none");
+  document.getElementById("difficultyBox").classList.add("d-none");
+  document.getElementById("gameArea").classList.add("d-none");
+}
+
+/* =======================
+   ENTER KEY SUPPORT
+======================= */
+document
+  .getElementById("letterInput")
+  .addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      guessLetter();
+    }
+  });
+
+/* =======================
+   SOUND
+======================= */
+function sound(url) {
+  const audio = new Audio(url);
+  audio.play();
+}
+
+/* =======================
+   GRAVEYARD
+======================= */
+function updateGraveyard(isCorrect, word) {
+  const correctWords = document.getElementById("correctWords");
+  const wrongWords = document.getElementById("wrongWords");
+
+  if (isCorrect) {
+    correctWords.textContent += word + ", ";
+  } else {
+    wrongWords.textContent += word + ", ";
+  }
 }
