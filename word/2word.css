@@ -10,7 +10,13 @@ body {
 }
 
 h1 {
+    color: #0042cf;
+
   margin-top: 20px;
+  display: inline-block;
+  background-color: rgba(255, 223, 0, 0.5);
+  padding: 6px 12px;
+  border-radius: 6px;
 }
 
 .hidden {
