@@ -109,3 +109,34 @@ button {
   border: rgb(219, 219, 219) 3px solid;
   box-shadow:white 0px 0px 8px 1px;
 }
+
+/* Expanded / collapsed states when a side is chosen */
+/* Add base transitions so changes animate smoothly and avoid sudden visibility toggles */
+#Christmas, #Hanukkah {
+  transition: width 0.6s ease, opacity 0.4s ease, margin 0.6s ease;
+  overflow: hidden;
+}
+
+#Christmas.expanded,
+#Hanukkah.expanded {
+  width: 100% !important;
+  clip-path: none !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  z-index: 2;
+}
+
+#Christmas.collapsed,
+#Hanukkah.collapsed {
+  width: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* Restore layout on small screens to avoid layout break */
+@media (max-width: 576px) {
+  #Christmas, #Hanukkah { width:100% !important; clip-path:none !important; margin:0 !important; }
+  #Christmas.collapsed, #Hanukkah.collapsed { display:none !important; }
+}
