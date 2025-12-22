@@ -6,15 +6,25 @@ function sideChosen(holiday) {
   const target = key === "hanukkah" ? han : chr;
   const other = target === han ? chr : han;
 
+  // Find the "Click me" button inside each column (if present)
+  const targetClick = target.querySelector("a > button, a button");
+  const otherClick = other.querySelector("a > button, a button");
+
   // Toggle
   if (target.classList.contains("expanded")) {
     target.classList.remove("expanded");
     other.classList.remove("collapsed");
+    // when collapsing back to default, hide both click buttons
+    if (targetClick) targetClick.classList.add("d-none");
+    if (otherClick) otherClick.classList.add("d-none");
     return;
   }
 
   target.classList.add("expanded");
   other.classList.add("collapsed");
+  // show target's click button and hide the other's
+  if (targetClick) targetClick.classList.remove("d-none");
+  if (otherClick) otherClick.classList.add("d-none");
 }
 
 (function createSnowfall() {
