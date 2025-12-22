@@ -20,25 +20,25 @@
     <header>
         <!-- place navbar here -->
     </header>
-    <main class="row g-0">
-        <div id="Hanukkah" class="col-6">
+    <main id="app" class="row g-0">
+        <div id="Hanukkah" class="col-6" :class="{ expanded: selected === 'Hanukkah', collapsed: selected && selected !== 'Hanukkah' }">
             <p>Hanukkah</p>
             <div id="expan">
-                <button class="toggle-btn" onclick="sideChosen('Hanukkah')">Mozel Tov</button>
+                <button class="toggle-btn" @click="toggle('Hanukkah')">Mozel Tov</button>
 
             </div>
             <a href="word/2word.html">
-                <button class="d-none">Click me</button>
+                <button v-show="selected === 'Hanukkah'">Click me</button>
             </a>
 
         </div>
-        <div id="Christmas" class="col-6">
+        <div id="Christmas" class="col-6" :class="{ expanded: selected === 'Christmas', collapsed: selected && selected !== 'Christmas' }">
             <p>Christmas</p>
             <div id="expan">
-                <button class="toggle-btn" onclick="sideChosen('Christmas')">Feliz Navidad</button>
+                <button class="toggle-btn" @click="toggle('Christmas')">Feliz Navidad</button>
             </div>
             <a href="hangman/1hangman.html">
-                <button class="d-none">Click me</button>
+                <button v-show="selected === 'Christmas'">Click me</button>
             </a>
 
         </div>
